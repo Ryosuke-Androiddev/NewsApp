@@ -1,9 +1,11 @@
 package com.example.newsapp.mvvm.utility
 
+import com.example.newsapp.BuildConfig
+
 class Constants {
 
     companion object{
-        const val API_KEY = "12cb2cddb01c4d7f85c598a87db43411"
+        const val API_KEY = BuildConfig.API_KEY
         const val BASE_URL = "https://newsapi.org"
         const val DATABASE_NAME = "article_database"
         const val TABLE_NAME = "articles"
