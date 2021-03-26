@@ -6,8 +6,13 @@ import com.example.newsapp.mvvm.utility.Constants.Companion.API_KEY
 import com.example.newsapp.mvvm.utility.Constants.Companion.COUNTRY_CODE
 import com.example.newsapp.mvvm.utility.Constants.Companion.PAGE_NUMBER
 import com.example.newsapp.mvvm.utility.Constants.Companion.QUERY_API_KEY
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class QueryViewModel(application: Application): AndroidViewModel(application) {
+@HiltViewModel
+class QueryViewModel @Inject constructor(
+    application: Application
+): AndroidViewModel(application) {
 
     fun applyQueries(): HashMap<String,String>{
 

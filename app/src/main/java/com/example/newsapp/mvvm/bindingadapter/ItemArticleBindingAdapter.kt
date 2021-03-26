@@ -4,6 +4,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import coil.load
+import com.example.newsapp.R
 import com.example.newsapp.mvvm.models.Source
 
 class ItemArticleBindingAdapter {
@@ -16,6 +17,7 @@ class ItemArticleBindingAdapter {
         fun loadImageFromUrl(imageView: ImageView,imageUrl: String){
             imageView.load(imageUrl){
                 crossfade(600)
+                error(R.drawable.ic_error_placeholder)
             }
         }
 

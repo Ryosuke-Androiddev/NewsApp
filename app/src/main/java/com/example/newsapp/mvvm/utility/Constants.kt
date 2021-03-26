@@ -6,7 +6,7 @@ class Constants {
         const val API_KEY = "12cb2cddb01c4d7f85c598a87db43411"
         const val BASE_URL = "https://newsapi.org"
         const val DATABASE_NAME = "article_database"
-        const val TABLE_NAME = "articles"
+        const val TABLE_NAME = "articles_table"
 
         //        countryCode: String = "us",
         //        pageNumber: Int = 1,

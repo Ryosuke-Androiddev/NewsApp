@@ -1,11 +1,8 @@
 package com.example.newsapp.mvvm.db.datasource
 
-import androidx.core.content.contentValuesOf
 import com.example.newsapp.mvvm.api.NewsApi
 import com.example.newsapp.mvvm.models.NewsResponse
-import com.example.newsapp.mvvm.utility.Constants
 import retrofit2.Response
-import retrofit2.http.Query
 import javax.inject.Inject
 
 class RemoteDataSource @Inject constructor(

@@ -5,7 +5,7 @@
     <data>
         <variable
             name="article"
-            type="com.example.newsapp.mvvm.db.Article" />
+            type="com.example.newsapp.mvvm.models.Article" />
     </data>
 
 

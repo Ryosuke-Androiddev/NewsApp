@@ -1,18 +1,23 @@
 package com.example.newsapp.mvvm.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapp.databinding.FragmentBreakingNewsBinding
 import com.example.newsapp.mvvm.adapter.ItemArticleAdapter
 import com.example.newsapp.mvvm.viewmodel.QueryViewModel
 import com.example.newsapp.mvvm.utility.NetworkResult
+import com.example.newsapp.mvvm.utility.observeOnce
 import com.example.newsapp.mvvm.viewmodel.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class BreakingNewsFragment : Fragment() {
@@ -24,6 +29,12 @@ class BreakingNewsFragment : Fragment() {
     private lateinit var queryViewModel: QueryViewModel
     private val newsAdapter by lazy { ItemArticleAdapter() }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        newsViewModel = ViewModelProvider(requireActivity()).get(NewsViewModel::class.java)
+        queryViewModel = ViewModelProvider(requireActivity()).get(QueryViewModel::class.java)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,9 +43,11 @@ class BreakingNewsFragment : Fragment() {
         _binding = FragmentBreakingNewsBinding.inflate(inflater,container,false)
 
         setupRecyclerView()
+        readDatabase()
 
         return binding.root
     }
+
 
     private fun setupRecyclerView() {
         binding.recyclerview.adapter = newsAdapter
@@ -42,9 +55,30 @@ class BreakingNewsFragment : Fragment() {
         showShimmerEffect()
     }
 
+
+    //You should be careful because this method will be done twice regardless your intention!!
+    private fun readDatabase() {
+        lifecycleScope.launch{
+            newsViewModel.getAllArticles.observeOnce(viewLifecycleOwner,{ datebase ->
+                if (datebase.isNotEmpty()){
+
+                    Log.d("BreakingNewsFragment", "ReadDatabase is called!!")
+
+                    newsAdapter.setData(datebase[0].newsResponse)
+                    hideShimmerEffect()
+                }else{
+                    requestApiData()
+                }
+            })
+        }
+    }
+
     private fun requestApiData() {
+
+        Log.d("BreakingNewsFragment", "requestApiData is called!!")
+
         newsViewModel.getInformation(queryViewModel.applyQueries())
-        newsViewModel.newsResponse.observe(viewLifecycleOwner, { response ->
+        newsViewModel.newsResponses.observe(viewLifecycleOwner, { response ->
             when(response){
                 is NetworkResult.Success -> {
                     hideShimmerEffect()
@@ -52,6 +86,7 @@ class BreakingNewsFragment : Fragment() {
                 }
                 is NetworkResult.Error -> {
                     hideShimmerEffect()
+                    loadDataFromCache()
                     Toast.makeText(
                         requireContext(),
                         response.message.toString(),
@@ -63,6 +98,17 @@ class BreakingNewsFragment : Fragment() {
                 }
             }
         })
+    }
+
+    // If you have no internet connection don't worry, you can see news because this method tell status which you used last time!!
+    private fun loadDataFromCache(){
+       lifecycleScope.launch{
+           newsViewModel.getAllArticles.observe(viewLifecycleOwner,{database ->
+               if (database.isNotEmpty()){
+                   newsAdapter.setData(database[0].newsResponse)
+               }
+           })
+       }
     }
 
     private fun showShimmerEffect() {

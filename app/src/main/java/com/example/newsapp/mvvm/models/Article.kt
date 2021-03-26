@@ -1,18 +1,10 @@
-package com.example.newsapp.mvvm.db
+package com.example.newsapp.mvvm.models
 
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.example.newsapp.mvvm.models.Source
-import com.example.newsapp.mvvm.utility.Constants.Companion.TABLE_NAME
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
-@Entity(
-    tableName = TABLE_NAME
-)
 data class Article(
-    @PrimaryKey(autoGenerate = true)
-    var id: Int,
     @SerializedName("author")
     val author: String,
     @SerializedName("content")
@@ -29,4 +21,4 @@ data class Article(
     val url: String,
     @SerializedName("urlToImage")
     val urlToImage: String
-)
+):Serializable

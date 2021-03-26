@@ -2,12 +2,10 @@ package com.example.newsapp.mvvm.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.newsapp.databinding.ItemArticlePreviewBinding
-import com.example.newsapp.mvvm.db.Article
+import com.example.newsapp.mvvm.models.Article
 import com.example.newsapp.mvvm.models.NewsResponse
 import com.example.newsapp.mvvm.utility.NewsDiffUtil
 
