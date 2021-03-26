@@ -2,6 +2,7 @@ package com.example.newsapp.mvvm.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import com.example.newsapp.BuildConfig
 import com.example.newsapp.mvvm.utility.Constants.Companion.API_KEY
 import com.example.newsapp.mvvm.utility.Constants.Companion.COUNTRY_CODE
 import com.example.newsapp.mvvm.utility.Constants.Companion.PAGE_NUMBER

@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.newsapp.R
 import com.example.newsapp.databinding.FragmentBreakingNewsBinding
 import com.example.newsapp.mvvm.adapter.ItemArticleAdapter
 import com.example.newsapp.mvvm.viewmodel.QueryViewModel
@@ -45,9 +47,23 @@ class BreakingNewsFragment : Fragment() {
         setupRecyclerView()
         readDatabase()
 
+        clickArticle()
+
         return binding.root
     }
 
+    // If you click article this method navigates web page!!
+    private fun clickArticle(){
+        newsAdapter.setOnItemClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("article",it)
+            }
+            findNavController().navigate(
+                R.id.action_breakingNewsFragment_to_articleFragment,
+                bundle
+            )
+        }
+    }
 
     private fun setupRecyclerView() {
         binding.recyclerview.adapter = newsAdapter
