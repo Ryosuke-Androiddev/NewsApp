@@ -1,7 +1,7 @@
 package com.example.newsapp.mvvm.utility
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.newsapp.mvvm.db.Article
+import com.example.newsapp.mvvm.models.Article
 
 class NewsDiffUtil(
     private val oldList: List<Article>,

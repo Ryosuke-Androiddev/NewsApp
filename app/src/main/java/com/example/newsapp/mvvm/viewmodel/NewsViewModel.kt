@@ -4,13 +4,13 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.example.newsapp.mvvm.db.ArticleEntity
 import com.example.newsapp.mvvm.models.NewsResponse
 import com.example.newsapp.mvvm.repository.NewsRepository
 import com.example.newsapp.mvvm.utility.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
@@ -21,24 +21,43 @@ class NewsViewModel @Inject constructor(
     application: Application
 ): AndroidViewModel(application){
 
-    var newsResponse: MutableLiveData<NetworkResult<NewsResponse>> = MutableLiveData()
+    /** setup for ROOM*/
+    val getAllArticles: LiveData<List<ArticleEntity>> = repository.local.getAllArticles().asLiveData()
+
+    private fun insertNews(articleEntity: ArticleEntity) =
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.local.insertNews(articleEntity)
+        }
+
+    /** setup for Retrofit*/
+    var newsResponses: MutableLiveData<NetworkResult<NewsResponse>> = MutableLiveData()
 
     fun getInformation(queries: Map<String,String>) = viewModelScope.launch {
         getNewsSafeCall(queries)
     }
 
     private suspend fun getNewsSafeCall(queries: Map<String, String>) {
-        newsResponse.value = NetworkResult.Loading()
+        newsResponses.value = NetworkResult.Loading()
         if (checkInternetConnection()){
             try {
                 val response = repository.remote.getBreakingNews(queries)
-                newsResponse.value = handleNewsResponse(response)
+                newsResponses.value = handleNewsResponse(response)
+
+                val bNewsResponse = newsResponses.value!!.data
+                if(bNewsResponse != null){
+                    offlineCacheNews(bNewsResponse)
+                }
             } catch (e:Exception){
-                newsResponse.value = NetworkResult.Error("Not found")
+                newsResponses.value = NetworkResult.Error("Not found")
             }
         } else{
-            newsResponse.value = NetworkResult.Error("No Internet Connection")
+            newsResponses.value = NetworkResult.Error("No Internet Connection")
         }
+    }
+
+    private fun offlineCacheNews(bNewsResponse: NewsResponse) {
+        val articleEntity = ArticleEntity(bNewsResponse)
+        insertNews(articleEntity)
     }
 
     //return values will be nullable so, you should write ? after that
