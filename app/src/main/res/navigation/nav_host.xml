@@ -17,6 +17,9 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_breakingNewsFragment_to_newsBottomSheetFragment"
+            app:destination="@id/newsBottomSheetFragment" />
     </fragment>
     <fragment
         android:id="@+id/savedNewsFragment"
@@ -49,4 +52,13 @@
         android:name="com.example.newsapp.mvvm.ui.fragments.ArticleFragment"
         android:label="fragment_article"
         tools:layout="@layout/fragment_article" />
+    <dialog
+        android:id="@+id/newsBottomSheetFragment"
+        android:name="com.example.newsapp.mvvm.ui.bottomsheet.NewsBottomSheetFragment"
+        android:label="news_bottom_sheet"
+        tools:layout="@layout/news_bottom_sheet" >
+        <action
+            android:id="@+id/action_newsBottomSheetFragment_to_breakingNewsFragment"
+            app:destination="@id/breakingNewsFragment" />
+    </dialog>
 </navigation>

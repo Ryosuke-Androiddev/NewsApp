@@ -2,4 +2,23 @@
     <string name="app_name">NewsApp</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="news_type">News Type</string>
+    <string name="top_headlinenews">Top Headline</string>
+    <string name="everything">Everything</string>
+    <string name="country">Country</string>
+    <string name="jp">JP</string>
+    <string name="us">US</string>
+    <string name="at">AT</string>
+    <string name="ca">CA</string>
+    <string name="gb">GB</string>
+    <string name="hk">HK</string>
+    <string name="ru">RU</string>
+    <string name="general">General</string>
+    <string name="health">Health</string>
+    <string name="business">Business</string>
+    <string name="science">Science</string>
+    <string name="sports">Sports</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="category">Category</string>
+    <string name="apply">Apply</string>
 </resources>

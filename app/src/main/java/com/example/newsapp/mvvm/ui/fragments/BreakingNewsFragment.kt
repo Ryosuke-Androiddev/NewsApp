@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.newsapp.R
 import com.example.newsapp.databinding.FragmentBreakingNewsBinding
 import com.example.newsapp.mvvm.adapter.ItemArticleAdapter
 import com.example.newsapp.mvvm.viewmodel.QueryViewModel
@@ -30,6 +32,11 @@ class BreakingNewsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentBreakingNewsBinding.inflate(inflater,container,false)
+
+        
+        binding.settingFloatingBT.setOnClickListener {
+            findNavController().navigate(R.id.action_breakingNewsFragment_to_newsBottomSheetFragment)
+        }
 
         setupRecyclerView()
 

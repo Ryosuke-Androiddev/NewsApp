@@ -16,6 +16,7 @@ class Constants {
         const val COUNTRY_CODE = "countryCode"
         const val PAGE_NUMBER = "pageNumber"
         const val QUERY_API_KEY = "apiKey"
+
     }
 
 }
