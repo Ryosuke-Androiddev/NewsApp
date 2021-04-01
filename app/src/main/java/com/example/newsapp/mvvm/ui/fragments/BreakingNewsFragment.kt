@@ -44,6 +44,10 @@ class BreakingNewsFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentBreakingNewsBinding.inflate(inflater,container,false)
 
+        binding.floatingNewsBT.setOnClickListener{
+            findNavController().navigate(R.id.action_breakingNewsFragment_to_newsBottomSheetFragment)
+        }
+
         setupRecyclerView()
         readDatabase()
 
