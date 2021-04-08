@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/breakingNewsFragment"
         android:name="com.example.newsapp.mvvm.ui.fragments.BreakingNewsFragment"
-        android:label="fragment_breaking_news"
+        android:label="BreakingNews"
         tools:layout="@layout/fragment_breaking_news" >
         <action
             android:id="@+id/action_breakingNewsFragment_to_articleFragment"
@@ -18,13 +18,17 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
         <action
-            android:id="@+id/action_breakingNewsFragment_to_newsBottomSheetFragment"
-            app:destination="@id/newsBottomSheetFragment" />
+            android:id="@+id/action_breakingNewsFragment_to_newsBottomSheet"
+            app:destination="@id/newsBottomSheet" />
+        <argument
+            android:name="backFromBottomSheet"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/savedNewsFragment"
         android:name="com.example.newsapp.mvvm.ui.fragments.SavedNewsFragment"
-        android:label="fragment_saved_news"
+        android:label="Saved News"
         tools:layout="@layout/fragment_saved_news" >
         <action
             android:id="@+id/action_savedNewsFragment_to_articleFragment"
@@ -37,7 +41,7 @@
     <fragment
         android:id="@+id/searchNewsFragment"
         android:name="com.example.newsapp.mvvm.ui.fragments.SearchNewsFragment"
-        android:label="fragment_search_news"
+        android:label="Search News"
         tools:layout="@layout/fragment_search_news" >
         <action
             android:id="@+id/action_searchNewsFragment_to_articleFragment"
@@ -57,12 +61,12 @@
             app:argType="com.example.newsapp.mvvm.models.Article" />
     </fragment>
     <dialog
-        android:id="@+id/newsBottomSheetFragment"
-        android:name="com.example.newsapp.mvvm.ui.fragments.bottomsheet.NewsBottomSheetFragment"
+        android:id="@+id/newsBottomSheet"
+        android:name="com.example.newsapp.mvvm.ui.fragments.bottomsheet.NewsBottomSheet"
         android:label="news_bottom_sheet"
         tools:layout="@layout/news_bottom_sheet" >
         <action
-            android:id="@+id/action_newsBottomSheetFragment_to_breakingNewsFragment"
+            android:id="@+id/action_newsBottomSheet_to_breakingNewsFragment"
             app:destination="@id/breakingNewsFragment" />
     </dialog>
 </navigation>

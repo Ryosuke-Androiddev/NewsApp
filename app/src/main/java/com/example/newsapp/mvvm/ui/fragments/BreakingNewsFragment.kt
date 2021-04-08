@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapp.R
 import com.example.newsapp.databinding.FragmentBreakingNewsBinding
@@ -23,6 +24,8 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class BreakingNewsFragment : Fragment() {
+
+    private val args by navArgs<BreakingNewsFragmentArgs>()
 
     private var _binding: FragmentBreakingNewsBinding? = null
     private val binding get() = _binding!!
@@ -45,7 +48,7 @@ class BreakingNewsFragment : Fragment() {
         _binding = FragmentBreakingNewsBinding.inflate(inflater,container,false)
 
         binding.floatingNewsBT.setOnClickListener{
-            findNavController().navigate(R.id.action_breakingNewsFragment_to_newsBottomSheetFragment)
+            findNavController().navigate(R.id.action_breakingNewsFragment_to_newsBottomSheet)
         }
 
         setupRecyclerView()
@@ -80,7 +83,7 @@ class BreakingNewsFragment : Fragment() {
     private fun readDatabase() {
         lifecycleScope.launch{
             newsViewModel.getAllArticles.observeOnce(viewLifecycleOwner,{ datebase ->
-                if (datebase.isNotEmpty()){
+                if (datebase.isNotEmpty() && !args.backFromBottomSheet){
 
                     Log.d("BreakingNewsFragment", "ReadDatabase is called!!")
 
