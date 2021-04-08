@@ -54,23 +54,11 @@ class BreakingNewsFragment : Fragment() {
         setupRecyclerView()
         readDatabase()
 
-        clickArticle()
 
         return binding.root
     }
 
-    // If you click article this method navigates web page!!
-    private fun clickArticle(){
-        newsAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("article",it)
-            }
-            findNavController().navigate(
-                R.id.action_breakingNewsFragment_to_articleFragment,
-                bundle
-            )
-        }
-    }
+
 
     private fun setupRecyclerView() {
         binding.recyclerview.adapter = newsAdapter

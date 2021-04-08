@@ -7,23 +7,23 @@ import androidx.fragment.app.Fragment
 import android.webkit.WebSettings
 import android.webkit.WebViewClient
 import androidx.navigation.fragment.navArgs
+import coil.load
 import com.example.newsapp.R
 import com.example.newsapp.databinding.FragmentArticleBinding
 import com.example.newsapp.mvvm.models.Article
 import com.example.newsapp.mvvm.ui.NewsActivity
 import com.example.newsapp.mvvm.viewmodel.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import org.jsoup.Jsoup
 
 @AndroidEntryPoint
 class ArticleFragment : Fragment() {
 
     private lateinit var newsViewModel: NewsViewModel
-    private val args: ArticleFragmentArgs by navArgs()
 
     private var _binding: FragmentArticleBinding? = null
     private val binding get() = _binding!!
 
-    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,24 +31,16 @@ class ArticleFragment : Fragment() {
 
         _binding = FragmentArticleBinding.inflate(inflater,container,false)
 
-        //webViewSetup()
+        val args = arguments
+        val myBundle: Article? = args?.getParcelable("articleBundle")
 
-        val article = args.article
-        binding.webView.loadUrl(article.url)
+        binding.mainImageView.load(myBundle?.urlToImage)
+        binding.summaryTextView.text = myBundle?.description
+        binding.titleTextView.text = myBundle?.title
 
-        val webSettings: WebSettings = binding.webView.settings
-        webSettings.javaScriptEnabled = true
-        binding.webView.webViewClient = WebViewClient()
-
-        binding.webView.canGoBack()
-        binding.webView.setOnKeyListener { v, keyCode, event ->
-            if(keyCode == KeyEvent.KEYCODE_BACK
-                    && event.action == MotionEvent.ACTION_UP
-                    && binding.webView.canGoBack()){
-                binding.webView.goBack()
-                return@setOnKeyListener true
-            }
-            false
+        myBundle?.description.let {
+            val desc = Jsoup.parse(it).text()
+            binding.summaryTextView.text = desc
         }
 
         return binding.root
