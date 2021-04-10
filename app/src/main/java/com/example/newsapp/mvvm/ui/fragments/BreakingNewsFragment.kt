@@ -80,7 +80,6 @@ class BreakingNewsFragment : Fragment() {
     }
 
 
-
     private fun setupRecyclerView() {
         binding.recyclerview.adapter = newsAdapter
         binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
