@@ -30,10 +30,12 @@ class Constants {
         const val PREFERENCES_NEWS_CATEGORY_ID = "newsCategoryId"
         const val PREFERENCES_NEWS_COUNTRY = "newsCountry"
         const val PREFERENCES_NEWS_COUNTRY_ID = "newsCountryId"
+        const val PREFERENCES_BACK_ONLINE = "backOnline"
         const val DEFAULT_NEWS_CHIP_ID = 0
 
         //modify constants
         const val QUERY_VALUE_API_KEY = "apiKey"
+
     }
 
 }
