@@ -5,7 +5,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.lifecycle.*
-import com.example.newsapp.mvvm.db.ArticleEntity
+import com.example.newsapp.mvvm.db.entities.ArticleEntity
 import com.example.newsapp.mvvm.models.NewsResponse
 import com.example.newsapp.mvvm.repository.NewsRepository
 import com.example.newsapp.mvvm.utility.NetworkResult

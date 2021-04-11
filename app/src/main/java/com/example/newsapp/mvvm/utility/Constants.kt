@@ -9,6 +9,7 @@ class Constants {
         const val BASE_URL = "https://newsapi.org"
         const val DATABASE_NAME = "article_database"
         const val TABLE_NAME = "articles_table"
+        const val FAVORITE_DB_NAME = "favorite_table"
 
         //        countryCode: String = "us",
         //        pageNumber: Int = 1,

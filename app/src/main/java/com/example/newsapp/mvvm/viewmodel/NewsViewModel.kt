@@ -5,7 +5,8 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.lifecycle.*
-import com.example.newsapp.mvvm.db.ArticleEntity
+import com.example.newsapp.mvvm.db.entities.ArticleEntity
+import com.example.newsapp.mvvm.db.entities.FavoriteEntity
 import com.example.newsapp.mvvm.models.NewsResponse
 import com.example.newsapp.mvvm.repository.NewsRepository
 import com.example.newsapp.mvvm.utility.NetworkResult
@@ -23,11 +24,27 @@ class NewsViewModel @Inject constructor(
 
     /** setup for ROOM*/
     val getAllArticles: LiveData<List<ArticleEntity>> = repository.local.getAllArticles().asLiveData()
+    val readFavoriteNews: LiveData<List<FavoriteEntity>> = repository.local.readFavoriteNews().asLiveData()
 
     private fun insertNews(articleEntity: ArticleEntity) =
         viewModelScope.launch(Dispatchers.IO) {
             repository.local.insertNews(articleEntity)
         }
+
+    private fun insertFavoriteNews(favoriteEntity: FavoriteEntity) =
+            viewModelScope.launch(Dispatchers.IO) {
+                repository.local.insertFavoriteNews(favoriteEntity)
+            }
+
+    private fun deleteFavoriteNews(favoriteEntity: FavoriteEntity) =
+            viewModelScope.launch(Dispatchers.IO) {
+                repository.local.deleteFavoriteNews(favoriteEntity)
+            }
+
+    private fun deleteAllFavoriteNews() =
+            viewModelScope.launch(Dispatchers.IO) {
+                repository.local.deleteAllFavoriteNews()
+            }
 
     /** setup for Retrofit*/
     var newsResponses: MutableLiveData<NetworkResult<NewsResponse>> = MutableLiveData()
