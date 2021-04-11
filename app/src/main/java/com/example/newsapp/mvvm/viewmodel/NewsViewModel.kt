@@ -31,17 +31,17 @@ class NewsViewModel @Inject constructor(
             repository.local.insertNews(articleEntity)
         }
 
-    private fun insertFavoriteNews(favoriteEntity: FavoriteEntity) =
+    fun insertFavoriteNews(favoriteEntity: FavoriteEntity) =
             viewModelScope.launch(Dispatchers.IO) {
                 repository.local.insertFavoriteNews(favoriteEntity)
             }
 
-    private fun deleteFavoriteNews(favoriteEntity: FavoriteEntity) =
+    fun deleteFavoriteNews(favoriteEntity: FavoriteEntity) =
             viewModelScope.launch(Dispatchers.IO) {
                 repository.local.deleteFavoriteNews(favoriteEntity)
             }
 
-    private fun deleteAllFavoriteNews() =
+    fun deleteAllFavoriteNews() =
             viewModelScope.launch(Dispatchers.IO) {
                 repository.local.deleteAllFavoriteNews()
             }
