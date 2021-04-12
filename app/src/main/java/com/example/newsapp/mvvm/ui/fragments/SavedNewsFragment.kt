@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SavedNewsFragment : Fragment() {
 
-    private val savedAdapter: SavedNewsAdapter by lazy { SavedNewsAdapter() }
+    private val savedAdapter: SavedNewsAdapter by lazy { SavedNewsAdapter(requireActivity()) }
     private lateinit var newsViewModel: NewsViewModel
 
     private var _binding: FragmentSavedNewsBinding? = null
