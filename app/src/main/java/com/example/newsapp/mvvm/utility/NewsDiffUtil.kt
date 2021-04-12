@@ -3,9 +3,9 @@ package com.example.newsapp.mvvm.utility
 import androidx.recyclerview.widget.DiffUtil
 import com.example.newsapp.mvvm.models.Article
 
-class NewsDiffUtil(
-    private val oldList: List<Article>,
-    private val newList: List<Article>
+class NewsDiffUtil<T>(
+    private val oldList: List<T>,
+    private val newList: List<T>
 ): DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
