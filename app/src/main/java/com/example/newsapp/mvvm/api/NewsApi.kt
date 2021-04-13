@@ -7,7 +7,7 @@ import retrofit2.http.QueryMap
 
 interface NewsApi {
 
-    @GET("v2/top-headlines")
+    @GET("/v2/top-headlines")
     suspend fun getBreakingNews(
        @QueryMap queries: Map<String,String>
     ): Response<NewsResponse>
@@ -19,7 +19,7 @@ interface NewsApi {
     //        @Query("apiKey")
     //        apiKey: String = API_KEY
 
-    @GET("v2/everything")
+    @GET("/v2/everything")
     suspend fun searchForNews(
         @QueryMap searchQuery: Map<String,String>
     ): Response<NewsResponse>

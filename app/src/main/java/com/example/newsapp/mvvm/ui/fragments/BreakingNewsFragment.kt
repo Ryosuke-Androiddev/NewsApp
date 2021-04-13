@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapp.R
 import com.example.newsapp.databinding.FragmentBreakingNewsBinding
@@ -23,6 +24,8 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class BreakingNewsFragment : Fragment() {
+
+    private val args by navArgs<BreakingNewsFragmentArgs>()
 
     private var _binding: FragmentBreakingNewsBinding? = null
     private val binding get() = _binding!!
@@ -44,26 +47,18 @@ class BreakingNewsFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentBreakingNewsBinding.inflate(inflater,container,false)
 
+        binding.floatingNewsBT.setOnClickListener{
+            findNavController().navigate(R.id.action_breakingNewsFragment_to_newsBottomSheet)
+        }
+
         setupRecyclerView()
         readDatabase()
 
-        clickArticle()
 
         return binding.root
     }
 
-    // If you click article this method navigates web page!!
-    private fun clickArticle(){
-        newsAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("article",it)
-            }
-            findNavController().navigate(
-                R.id.action_breakingNewsFragment_to_articleFragment,
-                bundle
-            )
-        }
-    }
+
 
     private fun setupRecyclerView() {
         binding.recyclerview.adapter = newsAdapter
@@ -76,7 +71,7 @@ class BreakingNewsFragment : Fragment() {
     private fun readDatabase() {
         lifecycleScope.launch{
             newsViewModel.getAllArticles.observeOnce(viewLifecycleOwner,{ datebase ->
-                if (datebase.isNotEmpty()){
+                if (datebase.isNotEmpty() && !args.backFromBottomSheet){
 
                     Log.d("BreakingNewsFragment", "ReadDatabase is called!!")
 
