@@ -15,11 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapp.R
 import com.example.newsapp.databinding.FragmentBreakingNewsBinding
 import com.example.newsapp.mvvm.adapter.ItemArticleAdapter
+import com.example.newsapp.mvvm.utility.NetworkListener
 import com.example.newsapp.mvvm.viewmodel.QueryViewModel
 import com.example.newsapp.mvvm.utility.NetworkResult
 import com.example.newsapp.mvvm.utility.observeOnce
 import com.example.newsapp.mvvm.viewmodel.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -33,6 +35,8 @@ class BreakingNewsFragment : Fragment() {
     private lateinit var newsViewModel: NewsViewModel
     private lateinit var queryViewModel: QueryViewModel
     private val newsAdapter by lazy { ItemArticleAdapter() }
+
+    private lateinit var networkListener: NetworkListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,16 +52,32 @@ class BreakingNewsFragment : Fragment() {
         _binding = FragmentBreakingNewsBinding.inflate(inflater,container,false)
 
         binding.floatingNewsBT.setOnClickListener{
-            findNavController().navigate(R.id.action_breakingNewsFragment_to_newsBottomSheet)
+            if (queryViewModel.networkStatus){
+                findNavController().navigate(R.id.action_breakingNewsFragment_to_newsBottomSheet)
+            }else{
+                queryViewModel.showNetworkStatus()
+            }
         }
 
         setupRecyclerView()
-        readDatabase()
 
+        queryViewModel.readBackOnline.observe(viewLifecycleOwner,{
+            queryViewModel.backOnline = it
+        })
+
+        lifecycleScope.launch {
+            networkListener = NetworkListener()
+            networkListener.checkNetworkAvailability(requireContext())
+                    .collect { status ->
+                        Log.d("NetworkListener",status.toString())
+                        queryViewModel.networkStatus = status
+                        queryViewModel.showNetworkStatus()
+                        readDatabase()
+                    }
+        }
 
         return binding.root
     }
-
 
 
     private fun setupRecyclerView() {

@@ -1,6 +1,7 @@
 package com.example.newsapp.mvvm.db
 
 import androidx.room.TypeConverter
+import com.example.newsapp.mvvm.models.Article
 import com.example.newsapp.mvvm.models.NewsResponse
 import com.example.newsapp.mvvm.models.Source
 import com.google.gson.Gson
@@ -27,6 +28,17 @@ class NewsConverters {
 
     @TypeConverter
     fun stringToNewsResponse(data: String): NewsResponse {
+        val listType = object : TypeToken<NewsResponse>() {}.type
+        return gson.fromJson(data,listType)
+    }
+
+    @TypeConverter
+    fun articleToString(article: Article): String{
+        return gson.toJson(article)
+    }
+
+    @TypeConverter
+    fun stringToArticle(data: String): Article{
         val listType = object : TypeToken<NewsResponse>() {}.type
         return gson.fromJson(data,listType)
     }

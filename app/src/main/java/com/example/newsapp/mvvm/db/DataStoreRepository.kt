@@ -7,6 +7,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.example.newsapp.mvvm.utility.Constants.Companion.DEFAULT_NEWS_CATEGORY
 import com.example.newsapp.mvvm.utility.Constants.Companion.DEFAULT_NEWS_CHIP_ID
 import com.example.newsapp.mvvm.utility.Constants.Companion.DEFAULT_NEWS_COUNTRY
+import com.example.newsapp.mvvm.utility.Constants.Companion.PREFERENCES_BACK_ONLINE
 import com.example.newsapp.mvvm.utility.Constants.Companion.PREFERENCES_NAME
 import com.example.newsapp.mvvm.utility.Constants.Companion.PREFERENCES_NEWS_CATEGORY
 import com.example.newsapp.mvvm.utility.Constants.Companion.PREFERENCES_NEWS_CATEGORY_ID
@@ -32,6 +33,7 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
         val selectedNewsCategoryId = intPreferencesKey(PREFERENCES_NEWS_CATEGORY_ID)
         val selectedNewsCountry = stringPreferencesKey(PREFERENCES_NEWS_COUNTRY)
         val selectedNewsCountryId = intPreferencesKey(PREFERENCES_NEWS_COUNTRY_ID)
+        val backOnline = booleanPreferencesKey(PREFERENCES_BACK_ONLINE)
     }
 
     private val dataStore: DataStore<Preferences> = context.dataStore
@@ -42,6 +44,12 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
             preferences[PreferenceKeys.selectedNewsCategoryId] = newsCategoryId
             preferences[PreferenceKeys.selectedNewsCountry] = newsCountry
             preferences[PreferenceKeys.selectedNewsCountryId] = newsCountryId
+        }
+    }
+
+    suspend fun saveBackOnline(backOnline: Boolean){
+        dataStore.edit { preferences->
+            preferences[PreferenceKeys.backOnline] = backOnline
         }
     }
 
@@ -64,6 +72,19 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
                         selectedNewsCountry,
                         selectedNewsCountryId
                 )
+            }
+
+    val readBackOnline: Flow<Boolean> = dataStore.data
+            .catch { exception->
+                if (exception is IOException){
+                    emit(emptyPreferences())
+                } else{
+                    throw exception
+                }
+            }
+            .map { preferences->
+                val backOnline = preferences[PreferenceKeys.backOnline] ?: false
+                backOnline //this means return value!!
             }
 }
 

@@ -22,4 +22,12 @@
     <string name="entertainment">Entertainment</string>
     <string name="category">Category</string>
     <string name="apply">Apply</string>
+    <string name="search">search</string>
+    <string name="save_favorite_news">Save Favorite News</string>
+    <string name="nothing_here">Nothing here</string>
+    <string name="delete">Delete</string>
+    <string name="fr">FR</string>
+    <string name="kr">KR</string>
+    <string name="pt">PT</string>
+    <string name="de">DE</string>
 </resources>

@@ -6,7 +6,6 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.lifecycle.*
 import com.example.newsapp.mvvm.db.entities.ArticleEntity
-import com.example.newsapp.mvvm.db.entities.FavoriteEntity
 import com.example.newsapp.mvvm.models.NewsResponse
 import com.example.newsapp.mvvm.repository.NewsRepository
 import com.example.newsapp.mvvm.utility.NetworkResult
@@ -17,58 +16,38 @@ import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
-class NewsViewModel @Inject constructor(
-    private val repository: NewsRepository,
-    application: Application
-): AndroidViewModel(application){
+class SearchViewModel @Inject constructor(
+        application: Application,
+        private val repository: NewsRepository
+): AndroidViewModel(application) {
 
     /** setup for ROOM*/
     val getAllArticles: LiveData<List<ArticleEntity>> = repository.local.getAllArticles().asLiveData()
-    val readFavoriteNews: LiveData<List<FavoriteEntity>> = repository.local.readFavoriteNews().asLiveData()
 
     private fun insertNews(articleEntity: ArticleEntity) =
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.local.insertNews(articleEntity)
-        }
-
-    fun insertFavoriteNews(favoriteEntity: FavoriteEntity) =
             viewModelScope.launch(Dispatchers.IO) {
-                repository.local.insertFavoriteNews(favoriteEntity)
-            }
-
-    fun deleteFavoriteNews(favoriteEntity: FavoriteEntity) =
-            viewModelScope.launch(Dispatchers.IO) {
-                repository.local.deleteFavoriteNews(favoriteEntity)
-            }
-
-    fun deleteAllFavoriteNews() =
-            viewModelScope.launch(Dispatchers.IO) {
-                repository.local.deleteAllFavoriteNews()
+                repository.local.insertNews(articleEntity)
             }
 
     /** setup for Retrofit*/
-    var newsResponses: MutableLiveData<NetworkResult<NewsResponse>> = MutableLiveData()
 
-    fun getInformation(queries: Map<String,String>) = viewModelScope.launch {
-        getNewsSafeCall(queries)
+    var searchedNewsResponse: MutableLiveData<NetworkResult<NewsResponse>> = MutableLiveData()
+
+    fun searchForNews(searchQuery: Map<String,String>) = viewModelScope.launch {
+        searchNewsSafeCall(searchQuery)
     }
 
-    private suspend fun getNewsSafeCall(queries: Map<String, String>) {
-        newsResponses.value = NetworkResult.Loading()
+    private suspend fun searchNewsSafeCall(searchQuery: Map<String, String>) {
+        searchedNewsResponse.value = NetworkResult.Loading()
         if (checkInternetConnection()){
             try {
-                val response = repository.remote.getBreakingNews(queries)
-                newsResponses.value = handleNewsResponse(response)
-
-                val bNewsResponse = newsResponses.value!!.data
-                if(bNewsResponse != null){
-                    offlineCacheNews(bNewsResponse)
-                }
+                val response = repository.remote.searchForNews(searchQuery)
+                searchedNewsResponse.value = handleNewsResponse(response)
             } catch (e:Exception){
-                newsResponses.value = NetworkResult.Error("Not found")
+                searchedNewsResponse.value = NetworkResult.Error("Not found")
             }
         } else{
-            newsResponses.value = NetworkResult.Error("No Internet Connection")
+            searchedNewsResponse.value = NetworkResult.Error("No Internet Connection")
         }
     }
 
@@ -101,7 +80,7 @@ class NewsViewModel @Inject constructor(
 
     private fun checkInternetConnection():  Boolean{
         val connectivityManager = getApplication<Application>().getSystemService(
-            Context.CONNECTIVITY_SERVICE
+                Context.CONNECTIVITY_SERVICE
         ) as ConnectivityManager
         val activeNetwork = connectivityManager.activeNetwork ?: return false
         val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
@@ -113,4 +92,5 @@ class NewsViewModel @Inject constructor(
             else -> false
         }
     }
+
 }
